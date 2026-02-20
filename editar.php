@@ -1,6 +1,14 @@
 <?php
 include 'conexion.php';
-$id = $_POST['id']; $n = $_POST['nombre'];
-$conexion->exec("UPDATE usuarios SET nombre = '$n' WHERE id = $id");
+
+if(isset($_POST['id']) && isset($_POST['nombre'])) {
+    $id = $_POST['id'];
+    $nombre = $_POST['nombre'];
+    
+    // Vulnerable a propósito para la tarea
+    $query = "UPDATE usuarios SET nombre = '$nombre' WHERE id = $id";
+    $conexion->exec($query);
+}
+
 header("Location: index.php");
 ?>
