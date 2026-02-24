@@ -1,6 +1,14 @@
 <?php
 include 'conexion.php';
-$id = $_GET['id'];
-$conexion->exec("DELETE FROM usuarios WHERE id = $id");
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['id'])) {
+    $id = $_POST['id'];
+    
+    $stmt = $conexion->prepare("DELETE FROM usuarios WHERE id = :id");
+    $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
+    $stmt->execute();
+}
+
 header("Location: index.php");
 ?>

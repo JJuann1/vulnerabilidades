@@ -1,6 +1,13 @@
 <?php
 include 'conexion.php';
-$n = $_POST['nombre'];
-$conexion->exec("INSERT INTO usuarios (nombre) VALUES ('$n')");
+
+if (!empty($_POST['nombre'])) {
+    $stmt = $conexion->prepare("INSERT INTO usuarios (nombre) VALUES (:nombre)");
+    
+    $stmt->bindValue(':nombre', $_POST['nombre'], SQLITE3_TEXT);
+    
+    $stmt->execute();
+}
+
 header("Location: index.php");
 ?>

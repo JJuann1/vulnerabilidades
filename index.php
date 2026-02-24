@@ -3,56 +3,57 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>CRUD Juan - Entrega</title>
+    <title>CRUD Final Blindado</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Registro de Usuarios (Vulnerable)</h2>
+    <h2 class="text-center mb-4">🛡️ Registro Ultra Seguro</h2>
     
-    <form action="insertar.php" method="POST" class="card p-3 mb-4 shadow-sm">
+    <form action="insertar.php" method="POST" class="card p-4 mb-4 shadow-sm">
         <div class="input-group">
-            <input type="text" name="nombre" class="form-control" placeholder="Nombre completo" required>
-            <button type="submit" class="btn btn-primary">Guardar Registro</button>
+            <input type="text" name="nombre" class="form-control" placeholder="Escribe el nombre aquí" required>
+            <button type="submit" class="btn btn-success">Guardar con Seguridad</button>
         </div>
     </form>
 
-    <table class="table table-white shadow-sm">
-        <thead class="table-dark"><tr><th>ID</th><th>Nombre</th><th>Acciones</th></tr></thead>
-        <tbody>
-            <?php
-            $res = $conexion->query("SELECT * FROM usuarios");
-            while($f = $res->fetchArray()){ ?>
-            <tr>
-                <td><?php echo $f['id']; ?></td>
-                <td><?php echo $f['nombre']; ?></td>
-                <td>
-                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#edit<?php echo $f['id']; ?>">Editar</button>
-                    <a href="eliminar.php?id=<?php echo $f['id']; ?>" class="btn btn-danger btn-sm">Eliminar</a>
-                </td>
-            </tr>
-            <?php } ?>
-        </tbody>
-    </table>
+    <div class="card shadow-sm">
+        <table class="table mb-0">
+            <thead class="table-dark"><tr><th>ID</th><th>Nombre</th><th>Acciones</th></tr></thead>
+            <tbody>
+                <?php
+                $res = $conexion->query("SELECT * FROM usuarios");
+                while($f = $res->fetchArray()){ ?>
+                <tr>
+                    <td><?php echo $f['id']; ?></td>
+                    <td><?php echo htmlspecialchars($f['nombre'], ENT_QUOTES, 'UTF-8'); ?></td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#edit<?php echo $f['id']; ?>">Editar</button>
+                        
+                        <form action="eliminar.php" method="POST" style="display:inline;">
+                            <input type="hidden" name="id" value="<?php echo $f['id']; ?>">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro?');">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <?php
 $res2 = $conexion->query("SELECT * FROM usuarios");
 while($f2 = $res2->fetchArray()){ ?>
-<div class="modal fade" id="edit<?php echo $f2['id']; ?>" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="edit<?php echo $f2['id']; ?>" tabindex="-1">
     <div class="modal-dialog">
         <form action="editar.php" method="POST" class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Actualizar Nombre</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+            <div class="modal-header"><h5 class="modal-title">Editar Registro</h5></div>
             <div class="modal-body">
                 <input type="hidden" name="id" value="<?php echo $f2['id']; ?>">
-                <input type="text" name="nombre" class="form-control" value="<?php echo $f2['nombre']; ?>" required>
+                <input type="text" name="nombre" class="form-control" value="<?php echo htmlspecialchars($f2['nombre'], ENT_QUOTES, 'UTF-8'); ?>" required>
             </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Actualizar Cambios</button>
-            </div>
+            <div class="modal-footer"><button type="submit" class="btn btn-primary">Actualizar</button></div>
         </form>
     </div>
 </div>

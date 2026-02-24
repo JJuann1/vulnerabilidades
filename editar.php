@@ -1,13 +1,13 @@
 <?php
 include 'conexion.php';
 
-if(isset($_POST['id']) && isset($_POST['nombre'])) {
-    $id = $_POST['id'];
-    $nombre = $_POST['nombre'];
+if (!empty($_POST['id']) && !empty($_POST['nombre'])) {
+    $stmt = $conexion->prepare("UPDATE usuarios SET nombre = :nombre WHERE id = :id");
     
-    // Vulnerable a propósito para la tarea
-    $query = "UPDATE usuarios SET nombre = '$nombre' WHERE id = $id";
-    $conexion->exec($query);
+    $stmt->bindValue(':nombre', $_POST['nombre'], SQLITE3_TEXT);
+    $stmt->bindValue(':id', $_POST['id'], SQLITE3_INTEGER);
+    
+    $stmt->execute();
 }
 
 header("Location: index.php");
